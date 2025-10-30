@@ -3,12 +3,13 @@ import React from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { ListNotesProps, Note } from '../types';
 
+// Remove a prop onAddNote que não está sendo usada
 interface ListNotesActivityProps extends ListNotesProps {
   notes: Note[];
-  onAddNote: (note: Note) => void; // Nova prop para adicionar notas
+  // onAddNote foi removido pois não é mais necessário
 }
 
-const ListNotesActivity: React.FC<ListNotesActivityProps> = ({ navigation, notes, onAddNote }) => {
+const ListNotesActivity: React.FC<ListNotesActivityProps> = ({ navigation, notes }) => {
   
   const handleNotePress = (noteId: string) => {
     navigation.navigate('ReadNote', { noteId });
@@ -50,20 +51,54 @@ const ListNotesActivity: React.FC<ListNotesActivityProps> = ({ navigation, notes
   );
 };
 
-// ... (styles permanecem os mesmos)
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 20, backgroundColor: '#f5f5f5' },
-    title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
-    noteItem: { padding: 15, backgroundColor: 'white', borderBottomWidth: 1, borderBottomColor: '#eee' },
-    noteTitle: { fontSize: 18, fontWeight: '600' },
-    noteTimestamp: { fontSize: 12, color: '#999', marginTop: 5 },
-    emptyText: { textAlign: 'center', marginTop: 50, fontSize: 16, color: '#999' },
-    newNoteButton: { marginTop: 20 },
-    // ... (styles anteriores),
-    emptyContainer: {
-        marginTop: 50,
-        alignItems: 'center',
-    }
+  container: { 
+    flex: 1, 
+    padding: 20, 
+    backgroundColor: '#f5f5f5' 
+  },
+  title: { 
+    fontSize: 24, 
+    fontWeight: 'bold', 
+    marginBottom: 20,
+    textAlign: 'center'
+  },
+  noteItem: { 
+    padding: 15, 
+    backgroundColor: 'white', 
+    borderBottomWidth: 1, 
+    borderBottomColor: '#eee',
+    marginBottom: 10,
+    borderRadius: 8,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  noteTitle: { 
+    fontSize: 18, 
+    fontWeight: '600',
+    color: '#333'
+  },
+  noteTimestamp: { 
+    fontSize: 12, 
+    color: '#999', 
+    marginTop: 5 
+  },
+  emptyText: { 
+    textAlign: 'center', 
+    marginTop: 50, 
+    fontSize: 16, 
+    color: '#999' 
+  },
+  newNoteButton: { 
+    marginTop: 20 
+  },
+  emptyContainer: {
+    marginTop: 50,
+    alignItems: 'center',
+  }
 });
 
 export default ListNotesActivity;
