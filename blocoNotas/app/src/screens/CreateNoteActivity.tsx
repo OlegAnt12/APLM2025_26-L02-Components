@@ -1,15 +1,16 @@
 // src/screens/CreateNoteActivity.tsx
-
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { CreateNoteProps, Note } from '../types';
 
-const CreateNoteActivity: React.FC<CreateNoteProps> = ({ navigation, route }) => {
+// Extendemos as props para incluir a callback
+interface CreateNoteActivityProps extends CreateNoteProps {
+  onSaveNote: (note: Note) => void;
+}
+
+const CreateNoteActivity: React.FC<CreateNoteActivityProps> = ({ navigation, onSaveNote }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-
-  // Simulação de retorno de dados para a tela ListNotes usando params
-  // Em uma aplicação real, isto usaria Context/Redux ou um callback
 
   const handleSaveNote = () => {
     if (!title.trim() || !content.trim()) {
@@ -17,7 +18,6 @@ const CreateNoteActivity: React.FC<CreateNoteProps> = ({ navigation, route }) =>
       return;
     }
     
-    // Simulação do resultado (a lista de notas será atualizada no App.tsx)
     const newNote: Note = {
         id: Date.now().toString(),
         title: title.trim(),
@@ -25,24 +25,20 @@ const CreateNoteActivity: React.FC<CreateNoteProps> = ({ navigation, route }) =>
         timestamp: Date.now(),
     };
 
-    // A nova nota é aceita e a lista é atualizada.
-    // Note: Usamos navigate com merge: true para enviar o dado de volta.
-    // O ListNotesActivity precisa ser re-renderizado para ver a mudança.
-    navigation.navigate('ListNotes', { 
-        // @ts-ignore: Passando o objeto complexo via params.
-        newNote: newNote 
-    });
+    // Chama a função passada via props para salvar a nota
+    onSaveNote(newNote);
+    
+    // Volta para a lista de notas
+    navigation.goBack();
   };
 
   const handleCancel = () => {
-    // Pressionar Cancel encerra a atividade, a nota é descartada.
     navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
         <Text style={styles.label}>Título da Nota:</Text>
-        {/* Visão para digitar o título da nota [cite: 91] */}
         <TextInput
             style={styles.titleInput}
             value={title}
@@ -51,7 +47,6 @@ const CreateNoteActivity: React.FC<CreateNoteProps> = ({ navigation, route }) =>
         />
 
         <Text style={styles.label}>Conteúdo da Nota:</Text>
-        {/* Visão para digitar o texto da nota [cite: 91] */}
         <TextInput
             style={styles.contentInput}
             value={content}
@@ -61,15 +56,14 @@ const CreateNoteActivity: React.FC<CreateNoteProps> = ({ navigation, route }) =>
         />
 
         <View style={styles.buttonGroup}>
-            {/* Botão OK para aceitar a nota [cite: 91] */}
             <Button title="OK" onPress={handleSaveNote} />
-            {/* Botão Cancel para cancelar a nota [cite: 91] */}
             <Button title="Cancel" onPress={handleCancel} color="#dc3545" />
         </View>
     </View>
   );
 };
 
+// ... (styles permanecem os mesmos)
 const styles = StyleSheet.create({
     container: { flex: 1, padding: 20, backgroundColor: 'white' },
     label: { fontSize: 16, marginTop: 15, marginBottom: 5, fontWeight: '600' },
